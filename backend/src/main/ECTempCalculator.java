@@ -3,50 +3,99 @@ import java.util.Queue;
 
 public class ECTempCalculator {
 
-    // Constants for Sigmoid Function - Sigmoid function gives a presised output over the qudratic function.
-    private static final double minCore = 36.5;  // Minimum Core Temperature
-    private static final double maxCore = 40.0;  // Maximum Core Temperature
-    private static final double sigGrowthRate = 0.05;  // Sigmoid Growth Rate
-    private static final double midSigmoid = 37.0;  // Midpoint (Baseline CT)
-    private static final double factorSigmoid = 1.5;   // Sigmoid Shape Factor
-    private static final double sharpnessSigmoid = 2.0;   // Sigmoid Curve Sharpness
+    // Sigmoid function parameters (from Looney et al., 2018)
+    private static final double A = 41;      // Minimum HR
+    private static final double K = 152;     // Maximum HR
+    private static final double Q = 0.06;    // Scaling factor
+    private static final double beta = 0.89; // Growth rate
+    private static final double M = 37.84;   // Midpoint CT
+    private static final double v = 0.07;    // Shape parameter
 
     // Kalman Filter Variables
-    private double estimatedCT = 37.0;  // Initial core temperature
-    private double variance = 0.02;  // Initial variance
-    private Queue<Double> hrObservations = new LinkedList<>();  // Store past HR values
+    private double estimatedCT = 37.0;  // Initial core temperature estimate
+    private double variance = 0.02;     // Initial variance
+    private Queue<Double> hrObservations = new LinkedList<>();  // Stores past HR values
 
     /**
-     * Sigmoid function mapping HR to Core Temperature (CT)
+     * Computes the predicted HR for a given CT using the sigmoid function.
+     * @param ct - Core Temperature (°C)
+     * @return Predicted Heart Rate (BPM)
      */
-    private double sigmoidFunction(double heartRate) {
-        return minCore + ((maxCore - minCore) / (1 + factorSigmoid * Math.exp(-sigGrowthRate * (estimatedCT - midSigmoid))));
+    private double predictedHR(double ct) {
+        double numerator = K - A;
+        double denominator = Math.pow(1 + Q * Math.exp(-beta * (ct - M)), 1 / v);
+        return A + (numerator / denominator);
     }
 
     /**
-     * Updates core temperature using Kalman Filtering
-     * @param heartRate - New heart rate measurement
-     * @return Updated core body temperature estimate
+     * Estimates Core Temperature (CT) from Heart Rate (HR) by inverting the sigmoid function.
+     * @param heartRate - Current HR reading (BPM)
+     * @return Estimated Core Temperature (°C)
+     */
+    private double computeCoreTemp(double heartRate) {
+        // Ensure HR is within realistic limits
+        if (heartRate < A || heartRate > K) {
+            return estimatedCT; // Return last known CT if HR is out of range
+        }
+
+        // Invert the sigmoid function to estimate CT
+        double term = Math.pow((K - A) / (heartRate - A), v) - 1;
+        double logInput = term / Q;
+
+        // Prevent log(0) or negative values (which would result in NaN)
+        if (logInput <= 0) {
+            System.out.println("⚠️ ERROR: logInput is non-positive! Returning previous CT.");
+            return estimatedCT;
+        }
+
+        return M - (Math.log(logInput) / beta);
+    }
+
+    /**
+     * Updates the core temperature estimate using the Kalman Filter.
+     * @param heartRate - New heart rate measurement (BPM)
+     * @return Smoothed Core Temperature Estimate (°C)
      */
     public double updateCoreTemp(double heartRate) {
-        // Apply Sigmoid function
-        double predictedCT = sigmoidFunction(heartRate);
+        // Compute Core Temp from HR
+        double computedCT = computeCoreTemp(heartRate);  
 
-        // Kalman Gain Calculation
-        double kalmanGain = variance / (variance + 0.02); // 0.02 is assumed sensor noise variance
+        // Time Update: Predict the next CT estimate
+        double predictedCT = estimatedCT;  
+        double predictedVariance = variance + 0.01;  // Increased uncertainty
 
-        // Update Estimate
-        estimatedCT = estimatedCT + kalmanGain * (predictedCT - estimatedCT);
+        // Compute the derivative dynamically
+        double predictedHRValue = predictedHR(predictedCT);
+        double m = (-beta * (K - A) * v * Math.pow(Math.max(predictedHRValue - A, 1), -1 - v)) /
+                   (Math.pow(1 + Q * Math.exp(-beta * (predictedCT - M)), 1 / v));
 
-        // Update Variance
-        variance = (1 - kalmanGain) * variance;
+        // Prevent m from being too small
+        if (Math.abs(m) < 1e-6) {
+            m = 1e-6;  // Small nonzero value
+        }
 
-        // Store HR for trend analysis
+        // Kalman Gain Calculation (Clamp to [0.0001, 1])
+        double kalmanGain = (predictedVariance * m) / (Math.pow(m, 2) * predictedVariance + 356.4544);
+        kalmanGain = Math.max(0.0001, Math.min(1, kalmanGain));
+
+        // Final Estimate: Update CT and variance
+        estimatedCT = predictedCT + kalmanGain * (heartRate - predictedHRValue);
+        variance = (1 - kalmanGain * m) * predictedVariance;
+
+        // Store HR for trend analysis (optional)
         hrObservations.add(heartRate);
-        if (hrObservations.size() > 60) { // Keep last 60 observations (1 hour of data)
+        if (hrObservations.size() > 60) { 
             hrObservations.poll();
         }
 
+        // Debugging prints
+        System.out.println("HR: " + heartRate + 
+                           " | Computed CT: " + computedCT + 
+                           " | Predicted CT: " + predictedCT + 
+                           " | Kalman Gain: " + kalmanGain + 
+                           " | HR Prediction: " + predictedHRValue +
+                           " | Final CT: " + estimatedCT);
+        
         return estimatedCT;
     }
 
@@ -54,8 +103,8 @@ public class ECTempCalculator {
     public static void main(String[] args) {
         ECTempCalculator ecTemp = new ECTempCalculator();
 
-        // Simulated HR values (Dynamic Testing)
-        double[] heartRates = {72, 78, 85, 90, 95, 100, 110, 120};
+        // Simulated HR values (Testing)
+        double[] heartRates = {60, 80, 100, 120, 140};
 
         for (double hr : heartRates) {
             double temp = ecTemp.updateCoreTemp(hr);
