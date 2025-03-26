@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		4076614D2D865BAC00891077 /* PulseTemp Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4076614C2D865BAC00891077 /* PulseTemp Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4076618D2D86607D00891077 /* PulseTemp.app in Resources */ = {isa = PBXBuildFile; fileRef = 407661272D865BAA00891077 /* PulseTemp.app */; };
+		4088F7DD2D8A776B000C74C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4088F7DB2D8A776B000C74C8 /* ContentView.swift */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9665D7F5CB1A3BD5C53A5490 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
@@ -31,33 +31,26 @@
 			remoteGlobalIDString = 407661262D865BAA00891077;
 			remoteInfo = PulseTemp;
 		};
-		4076614E2D865BAC00891077 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4076614B2D865BAC00891077;
-			remoteInfo = "PulseTemp Watch App";
-		};
-		4076615F2D865BAD00891077 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4076614B2D865BAC00891077;
-			remoteInfo = "PulseTemp Watch App";
-		};
-		407661692D865BAD00891077 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4076614B2D865BAC00891077;
-			remoteInfo = "PulseTemp Watch App";
-		};
 		4076618E2D86607D00891077 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 407661262D865BAA00891077;
 			remoteInfo = PulseTemp;
+		};
+		40F97C122D8A834A00626D98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4076614B2D865BAC00891077;
+			remoteInfo = "PulseTemp Watch App";
+		};
+		40F97C132D8A834A00626D98 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4076614B2D865BAC00891077;
+			remoteInfo = "PulseTemp Watch App";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -68,7 +61,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				4076614D2D865BAC00891077 /* PulseTemp Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -88,6 +80,7 @@
 		4076614C2D865BAC00891077 /* PulseTemp Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "PulseTemp Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4076615E2D865BAD00891077 /* PulseTemp Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PulseTemp Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		407661682D865BAD00891077 /* PulseTemp Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PulseTemp Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4088F7DB2D8A776B000C74C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-PulseTemp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PulseTemp.release.xcconfig"; path = "Target Support Files/Pods-PulseTemp/Pods-PulseTemp.release.xcconfig"; sourceTree = "<group>"; };
 		6A804C7EA40324963FE195E5 /* Pods-pulseTemp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pulseTemp.release.xcconfig"; path = "Target Support Files/Pods-pulseTemp/Pods-pulseTemp.release.xcconfig"; sourceTree = "<group>"; };
 		716CDD09FB6EE4AD6D0CF65C /* libPods-pulseTemp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pulseTemp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,8 +89,18 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		40F97BBF2D8A7BB800626D98 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 407661262D865BAA00891077 /* PulseTemp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		407661282D865BAA00891077 /* PulseTemp */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PulseTemp; sourceTree = "<group>"; };
+		407661282D865BAA00891077 /* PulseTemp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (40F97BBF2D8A7BB800626D98 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = PulseTemp; sourceTree = "<group>"; };
 		407661392D865BAC00891077 /* PulseTempTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PulseTempTests; sourceTree = "<group>"; };
 		407661432D865BAC00891077 /* PulseTempUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = PulseTempUITests; sourceTree = "<group>"; };
 		407661502D865BAC00891077 /* PulseTemp Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "PulseTemp Watch App"; sourceTree = "<group>"; };
@@ -190,6 +193,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4088F7DB2D8A776B000C74C8 /* ContentView.swift */,
 				13B07FAE1A68108700A75B9A /* pulseTemp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				407661282D865BAA00891077 /* PulseTemp */,
@@ -268,7 +272,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				4076614F2D865BAC00891077 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				407661282D865BAA00891077 /* PulseTemp */,
@@ -591,6 +594,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4088F7DD2D8A776B000C74C8 /* ContentView.swift in Sources */,
 				761780ED2CA45674006654EE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -650,20 +654,15 @@
 			target = 407661262D865BAA00891077 /* PulseTemp */;
 			targetProxy = 407661412D865BAC00891077 /* PBXContainerItemProxy */;
 		};
-		4076614F2D865BAC00891077 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4076614B2D865BAC00891077 /* PulseTemp Watch App */;
-			targetProxy = 4076614E2D865BAC00891077 /* PBXContainerItemProxy */;
-		};
 		407661602D865BAD00891077 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4076614B2D865BAC00891077 /* PulseTemp Watch App */;
-			targetProxy = 4076615F2D865BAD00891077 /* PBXContainerItemProxy */;
+			targetProxy = 40F97C122D8A834A00626D98 /* PBXContainerItemProxy */;
 		};
 		4076616A2D865BAD00891077 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 4076614B2D865BAC00891077 /* PulseTemp Watch App */;
-			targetProxy = 407661692D865BAD00891077 /* PBXContainerItemProxy */;
+			targetProxy = 40F97C132D8A834A00626D98 /* PBXContainerItemProxy */;
 		};
 		4076618F2D86607D00891077 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -947,7 +946,7 @@
 		407661772D865BAD00891077 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Watch";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -992,7 +991,7 @@
 		407661782D865BAD00891077 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Watch";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_NONNULL = YES;

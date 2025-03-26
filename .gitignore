@@ -3,11 +3,19 @@
 .xcode.env
 .xcode.env.local
 
+# Ignore Node.js dependencies
+node_modules/
+npm-debug.log
+yarn.lock
+pnpm-lock.yaml
+
 # Ignore Xcode build files
 frontend/ios/build/
 frontend/ios/.gradle/
 frontend/ios/Pods/
 frontend/ios/Podfile.lock
+frontend/ios/DerivedData/
+frontend/ios/xcuserdata/
 
 # Ignore React Native auto-generated files
 frontend/ios/RCTAppDependencyProvider.*
@@ -15,3 +23,21 @@ frontend/ios/RCTModulesConformingToProtocolsProvider.*
 frontend/ios/build/generated/
 frontend/ios/ReactAppDependencyProvider.podspec
 frontend/ios/ReactCodegen.podspec
+
+# Ignore Gradle files
+.gradle/
+*.iml
+.gradle/cache/
+.gradle/wrapper/
+frontend/android/.gradle/
+frontend/android/build/
+frontend/android/local.properties
+frontend/android/app/build/
+frontend/android/.idea/
+frontend/android/.cxx/
+
+# Ignore Expo & Metro bundler cache
+.expo/
+.expo-shared/
+metro-cache/
+packager-cache/

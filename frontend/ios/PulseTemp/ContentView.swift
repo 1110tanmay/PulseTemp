@@ -1,24 +1,33 @@
-//
-//  ContentView.swift
-//  PulseTemp
-//
-//  Created by Tanmay Shelar on 3/15/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            SummaryView()  // ✅ Summary Tab
+                .tabItem {
+                    Image(systemName: "chart.bar.fill")
+                    Text("Summary")
+                }
+
+            TrendsView()  // ✅ Trends Tab
+                .tabItem {
+                    Image(systemName: "waveform.path.ecg")
+                    Text("Trends")
+                }
+
+            ProfileView()  // ✅ Profile Tab (Added)
+                .tabItem {
+                    Image(systemName: "person.crop.circle")
+                    Text("Profile")
+                }
         }
-        .padding()
     }
 }
 
-#Preview {
-    ContentView()
+// ✅ Preview
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
+
