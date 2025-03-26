@@ -1,0 +1,17 @@
+# Ignore macOS system files
+.DS_Store
+.xcode.env
+.xcode.env.local
+
+# Ignore Xcode build files
+frontend/ios/build/
+frontend/ios/.gradle/
+frontend/ios/Pods/
+frontend/ios/Podfile.lock
+
+# Ignore React Native auto-generated files
+frontend/ios/RCTAppDependencyProvider.*
+frontend/ios/RCTModulesConformingToProtocolsProvider.*
+frontend/ios/build/generated/
+frontend/ios/ReactAppDependencyProvider.podspec
+frontend/ios/ReactCodegen.podspec
