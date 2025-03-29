@@ -3,28 +3,36 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            SummaryView()  // ✅ Summary Tab
+            SummaryView()
                 .tabItem {
                     Image(systemName: "chart.bar.fill")
                     Text("Summary")
                 }
 
-            TrendsView()  // ✅ Trends Tab
+            TrendsView()
                 .tabItem {
                     Image(systemName: "waveform.path.ecg")
                     Text("Trends")
                 }
 
-            ProfileView()  // ✅ Profile Tab (Added)
+            ProfileView()
                 .tabItem {
                     Image(systemName: "person.crop.circle")
                     Text("Profile")
                 }
         }
+        .onAppear {
+            HealthKitManager.shared.requestAuthorization { success, error in
+                if success {
+                    print("✅ HealthKit authorization granted")
+                } else {
+                    print("❌ HealthKit authorization failed: \(String(describing: error))")
+                }
+            }
+        }
     }
 }
 
-// ✅ Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
