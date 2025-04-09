@@ -2,18 +2,29 @@ import SwiftUI
 import Charts
 
 struct SummaryView: View {
+    @EnvironmentObject var healthKitManager: HealthKitManager
     @AppStorage("temperatureUnit") private var temperatureUnit: String = "°C"
     @AppStorage("distanceUnit") private var distanceUnit: String = "km"
-    @AppStorage("firstName") private var firstName: String = "Tanmay" // 👈 Pulled from user profile
+    @AppStorage("firstName") private var firstName: String = "Tanmay"
 
-    // Simulated metric values (replace with real data later)
-    let heartRate = 75
-    let coreTempC = 37.2
-    let steps = 8500
-    let calories = 410
-    let distanceKm = 4.5
+    // MARK: - Computed Properties with fallback
+    var heartRate: Int {
+        Int(healthKitManager.latestHeartRate ?? 75)
+    }
 
-    // Mock temperature trend
+    var steps: Int {
+        Int(healthKitManager.latestSteps ?? 8500)
+    }
+
+    var calories: Int {
+        Int(healthKitManager.latestCalories ?? 410)
+    }
+
+    var distanceKm: Double {
+        healthKitManager.latestDistance ?? 4.5
+    }
+
+    // MARK: - Mock chart for temperature (for now)
     let mockTempTrend: [TemperatureData] = [
         TemperatureData(time: "8AM", temperature: 36.8),
         TemperatureData(time: "10AM", temperature: 37.1),
@@ -26,18 +37,17 @@ struct SummaryView: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-
-                    // 👋 Dynamic Greeting
+                    // Greeting
                     Text("\(timeBasedGreeting()), \(firstName) 👋")
                         .font(.title2)
                         .fontWeight(.semibold)
                         .padding(.horizontal)
 
-                    // 🌡️ Core Temperature Card with Chart
+                    // Core Temperature
                     NavigationLink(destination: CoreTempDetailView()) {
                         HealthMetricCard(
                             title: "Core Temperature",
-                            value: formattedTemperature(coreTempC),
+                            value: formattedTemperature(37.2), // placeholder
                             icon: "thermometer",
                             color: .orange,
                             isLarge: true,
@@ -54,7 +64,6 @@ struct SummaryView: View {
                                             endPoint: .bottom
                                         )
                                     )
-
                                     LineMark(
                                         x: .value("Time", $0.time),
                                         y: .value("Temp", $0.temperature)
@@ -69,7 +78,7 @@ struct SummaryView: View {
                         )
                     }
 
-                    // ❤️ Heart Rate Card
+                    // Heart Rate
                     NavigationLink(destination: HeartRateDetailView()) {
                         HealthMetricCard(
                             title: "Heart Rate",
@@ -79,7 +88,7 @@ struct SummaryView: View {
                         )
                     }
 
-                    // 🔥 Activity Summary
+                    // Activity
                     NavigationLink(destination: ActivityDetailView()) {
                         HealthMetricCard(
                             title: "Activity",
@@ -89,7 +98,7 @@ struct SummaryView: View {
                         )
                     }
 
-                    // ⚡ Calories
+                    // Calories
                     NavigationLink(destination: CaloriesDetailView()) {
                         HealthMetricCard(
                             title: "Calories Burned",
@@ -99,7 +108,7 @@ struct SummaryView: View {
                         )
                     }
 
-                    // 🗺️ Distance
+                    // Distance
                     NavigationLink(destination: DistanceDetailView()) {
                         HealthMetricCard(
                             title: "Distance Covered",
@@ -114,7 +123,6 @@ struct SummaryView: View {
             .navigationTitle("Summary")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
-                // 👤 Profile image in top-right corner
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Image("profile_pic")
                         .resizable()
@@ -123,11 +131,13 @@ struct SummaryView: View {
                         .clipShape(Circle())
                 }
             }
+            .onAppear {
+                healthKitManager.fetchAllMetrics()
+            }
         }
     }
 
     // MARK: - Helpers
-
     func formattedTemperature(_ celsius: Double) -> String {
         if temperatureUnit == "°F" {
             let fahrenheit = celsius * 9 / 5 + 32
@@ -157,7 +167,7 @@ struct SummaryView: View {
     }
 }
 
-// MARK: - Temperature Trend Model
+// Still mock for temp chart
 struct TemperatureData: Identifiable {
     let id = UUID()
     let time: String

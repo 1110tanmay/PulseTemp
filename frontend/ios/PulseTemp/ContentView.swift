@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var hasRequestedHealthKit = false
+
     var body: some View {
         TabView {
             SummaryView()
@@ -22,6 +24,10 @@ struct ContentView: View {
                 }
         }
         .onAppear {
+            #if !TARGET_INTERFACE_BUILDER
+            guard !hasRequestedHealthKit else { return }
+            hasRequestedHealthKit = true
+
             HealthKitManager.shared.requestAuthorization { success, error in
                 if success {
                     print("✅ HealthKit authorization granted")
@@ -29,6 +35,7 @@ struct ContentView: View {
                     print("❌ HealthKit authorization failed: \(String(describing: error))")
                 }
             }
+            #endif
         }
     }
 }

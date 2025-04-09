@@ -1,17 +1,14 @@
-//
-//  PulseTempApp.swift
-//  PulseTemp
-//
-//  Created by Tanmay Shelar on 3/15/25.
-//
-
 import SwiftUI
 
 @main
 struct PulseTempApp: App {
+    @StateObject private var healthKitManager = HealthKitManager.shared
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(healthKitManager)
         }
     }
 }
+

@@ -2,41 +2,40 @@ import SwiftUI
 import Charts
 
 struct CaloriesDetailView: View {
-    // Mock Data for Calories Burned Trends
-    let caloriesTrendData: [(time: String, calories: Int)] = [
-        ("10 AM", 100), ("11 AM", 120), ("12 PM", 150),
-        ("1 PM", 180), ("2 PM", 210), ("3 PM", 250)
-    ]
-    
+    @EnvironmentObject var healthManager: HealthKitManager
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                
                 // Title
                 Text("Calories Burned Details")
                     .font(.largeTitle)
                     .fontWeight(.bold)
 
-                // Calories Burned Trend Chart
-                Chart {
-                    ForEach(caloriesTrendData, id: \.time) { point in
+                // Basic chart using latest value
+                if let calories = healthManager.latestCalories {
+                    Chart {
                         LineMark(
-                            x: .value("Time", point.time),
-                            y: .value("Calories", point.calories)
+                            x: .value("Time", "Today"),
+                            y: .value("Calories", calories)
                         )
                         .foregroundStyle(Color.purple)
                     }
+                    .frame(height: 200)
+                    .padding()
+                } else {
+                    Text("Loading calorie data...")
+                        .foregroundColor(.gray)
+                        .padding()
                 }
-                .frame(height: 200)
-                .padding()
 
                 // Latest Highlight
-                if let latest = caloriesTrendData.last {
+                if let calories = healthManager.latestCalories {
                     VStack {
-                        Text("Latest: \(latest.time)")
+                        Text("Today")
                             .foregroundColor(.white)
                             .fontWeight(.bold)
-                        Text("\(latest.calories) kcal")
+                        Text("\(Int(calories)) kcal")
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(.white)
@@ -63,6 +62,9 @@ struct CaloriesDetailView: View {
             .padding()
         }
         .navigationTitle("Calories Burned")
+        .onAppear {
+            healthManager.fetchLatestCalories()
+        }
     }
 }
 

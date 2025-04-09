@@ -49,5 +49,7 @@
 	<false/>
   <key>NSHealthShareUsageDescription</key>
   <string>PulseTemp uses your heartrate, calories, and steps to estimate your core body temperature during workouts.</string>
+  <key>NSHealthUpdateUsageDescription</key>
+  <string>PulseTemp may save workout data to Apple Health.</string>
 </dict>
 </plist>
