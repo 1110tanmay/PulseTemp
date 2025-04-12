@@ -2,52 +2,41 @@ import SwiftUI
 import Charts
 
 struct ActivityDetailView: View {
+    @EnvironmentObject var healthKitManager: HealthKitManager
     @AppStorage("distanceUnit") private var distanceUnit: String = "km"
-    
-    // Mock Data
-    let stepsData: [(time: String, steps: Int)] = [
-        ("10:00 AM", 1000), ("11:00 AM", 2300), ("12:00 PM", 4500),
-        ("1:00 PM", 6000), ("2:00 PM", 7200), ("3:00 PM", 8500)
-    ]
-    
-    let caloriesData: [(time: String, calories: Int)] = [
-        ("10:00 AM", 50), ("11:00 AM", 120), ("12:00 PM", 200),
-        ("1:00 PM", 270), ("2:00 PM", 350), ("3:00 PM", 410)
-    ]
-    
-    let distanceData: [(time: String, distance: Double)] = [
-        ("10:00 AM", 0.5), ("11:00 AM", 1.2), ("12:00 PM", 2.1),
-        ("1:00 PM", 3.0), ("2:00 PM", 3.8), ("3:00 PM", 4.5)
-    ]
+    @State private var timer: Timer?
 
-    var convertedDistanceData: [(time: String, distance: Double)] {
-        distanceData.map { (time, dist) in
-            (time, distanceUnit == "miles" ? kmToMiles(dist) : dist)
+    var convertedDistanceTrend: [DistancePoint] {
+        healthKitManager.distanceTrendData.map { point in
+            var updated = point
+            updated.distance = distanceUnit == "miles" ? kmToMiles(point.distance) : point.distance
+            return updated
         }
     }
 
     var totalDistanceText: String {
-        guard let latest = convertedDistanceData.last else { return "-" }
+        guard let latest = convertedDistanceTrend.last else { return "-" }
         return String(format: "%.2f %@", latest.distance, distanceUnit)
     }
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Steps Section
+
+                // 🧍 Steps Walked
                 VStack {
                     Text("Steps Walked")
                         .font(.headline)
-                    Text("8,500 steps")
+                    Text("\(healthKitManager.latestSteps ?? 0) steps")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                 }
 
                 Chart {
-                    ForEach(stepsData, id: \.time) { dataPoint in
+                    ForEach(healthKitManager.stepsTrendData) { point in
                         BarMark(
-                            x: .value("Time", dataPoint.time),
-                            y: .value("Steps", dataPoint.steps)
+                            x: .value("Time", point.timestamp),
+                            y: .value("Steps", point.steps)
                         )
                         .foregroundStyle(Color.blue)
                     }
@@ -55,20 +44,20 @@ struct ActivityDetailView: View {
                 .frame(height: 200)
                 .padding()
 
-                // Calories Burned Section
+                // 🔥 Calories Burned
                 VStack {
                     Text("Calories Burned")
                         .font(.headline)
-                    Text("410 kcal")
+                    Text("\(Int(healthKitManager.latestCalories ?? 0)) kcal")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                 }
 
                 Chart {
-                    ForEach(caloriesData, id: \.time) { dataPoint in
+                    ForEach(healthKitManager.caloriesTrendData) { point in
                         BarMark(
-                            x: .value("Time", dataPoint.time),
-                            y: .value("Calories", dataPoint.calories)
+                            x: .value("Time", point.timestamp),
+                            y: .value("Calories", point.calories)
                         )
                         .foregroundStyle(Color.red)
                     }
@@ -76,7 +65,7 @@ struct ActivityDetailView: View {
                 .frame(height: 200)
                 .padding()
 
-                // Distance Traveled Section
+                // 🏃‍♂️ Distance Traveled
                 VStack {
                     Text("Distance Traveled")
                         .font(.headline)
@@ -86,10 +75,10 @@ struct ActivityDetailView: View {
                 }
 
                 Chart {
-                    ForEach(convertedDistanceData, id: \.time) { dataPoint in
+                    ForEach(convertedDistanceTrend) { point in
                         LineMark(
-                            x: .value("Time", dataPoint.time),
-                            y: .value("Distance (\(distanceUnit))", dataPoint.distance)
+                            x: .value("Time", point.timestamp),
+                            y: .value("Distance (\(distanceUnit))", point.distance)
                         )
                         .foregroundStyle(Color.green)
                     }
@@ -102,11 +91,41 @@ struct ActivityDetailView: View {
             .padding()
         }
         .navigationTitle("Activity Details")
+        .onAppear {
+            startPolling()
+        }
+        .onDisappear {
+            stopPolling()
+        }
     }
 
     // MARK: - Conversion
     func kmToMiles(_ km: Double) -> Double {
         km * 0.621371
+    }
+
+    // MARK: - Timer-based Polling
+    func startPolling() {
+        healthKitManager.fetchLatestSteps()
+        healthKitManager.fetchLatestCalories()
+        healthKitManager.fetchLatestDistance()
+        healthKitManager.fetchStepsTrend()
+        healthKitManager.fetchCaloriesTrend()
+        healthKitManager.fetchDistanceTrend()
+
+        timer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { _ in
+            healthKitManager.fetchLatestSteps()
+            healthKitManager.fetchLatestCalories()
+            healthKitManager.fetchLatestDistance()
+            healthKitManager.fetchStepsTrend()
+            healthKitManager.fetchCaloriesTrend()
+            healthKitManager.fetchDistanceTrend()
+        }
+    }
+
+    func stopPolling() {
+        timer?.invalidate()
+        timer = nil
     }
 }
 

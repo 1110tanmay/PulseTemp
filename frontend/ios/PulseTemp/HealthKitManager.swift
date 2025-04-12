@@ -21,6 +21,9 @@ class HealthKitManager: ObservableObject {
 
     // MARK: - Published Trend Data
     @Published var heartRateData: [HeartRatePoint] = []
+    @Published var stepsTrendData: [StepPoint] = []
+    @Published var caloriesTrendData: [CaloriePoint] = []
+    @Published var distanceTrendData: [DistancePoint] = []
 
     private init() {}
 
@@ -122,6 +125,34 @@ class HealthKitManager: ObservableObject {
         }
 
         healthStore.execute(query)
+    }
+
+    // MARK: - Stub Trend Fetchers (Temporary Mock Data)
+    func fetchStepsTrend() {
+        stepsTrendData = [
+            StepPoint(timestamp: "9 AM", steps: 1000),
+            StepPoint(timestamp: "10 AM", steps: 1400),
+            StepPoint(timestamp: "11 AM", steps: 1800),
+            StepPoint(timestamp: "12 PM", steps: 2000)
+        ]
+    }
+
+    func fetchCaloriesTrend() {
+        caloriesTrendData = [
+            CaloriePoint(timestamp: "9 AM", calories: 90),
+            CaloriePoint(timestamp: "10 AM", calories: 120),
+            CaloriePoint(timestamp: "11 AM", calories: 150),
+            CaloriePoint(timestamp: "12 PM", calories: 180)
+        ]
+    }
+
+    func fetchDistanceTrend() {
+        distanceTrendData = [
+            DistancePoint(timestamp: "9 AM", distance: 0.6),
+            DistancePoint(timestamp: "10 AM", distance: 1.2),
+            DistancePoint(timestamp: "11 AM", distance: 2.0),
+            DistancePoint(timestamp: "12 PM", distance: 2.8)
+        ]
     }
 
     // MARK: - Fetch All At Once (used in SummaryView)

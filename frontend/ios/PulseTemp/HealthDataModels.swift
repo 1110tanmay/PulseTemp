@@ -1,7 +1,20 @@
-//
-//  Untitled.swift
-//  PulseTemp
-//
-//  Created by Tanmay Shelar on 4/11/25.
-//
+import Foundation
+
+struct DistancePoint: Identifiable {
+    let id = UUID()
+    let timestamp: String
+    var distance: Double  
+}
+
+struct StepPoint: Identifiable {
+    let id = UUID()
+    let timestamp: String
+    let steps: Int
+}
+
+struct CaloriePoint: Identifiable {
+    let id = UUID()
+    let timestamp: String
+    let calories: Double
+}
 
